@@ -58,3 +58,5 @@ export const todayButtonTextColor = SECONDARY_TEXT_COLOR;
 export const todayButtonPosition = undefined; // right' / 'left'(default)
 
 export const weekVerticalMargin = 7;
+
+export const agendaMonthTextColor = '#b6c1cd';
