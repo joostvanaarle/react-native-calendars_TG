@@ -37,6 +37,13 @@ export default function styleConstructor(theme: Theme = {}) {
     indicator: {
       marginTop: 80
     },
+      dayMonth: {
+            fontSize: 10,
+            fontWeight: 300,
+            color: appStyle.agendaDayTextColor,
+            marginTop: 32,
+            backgroundColor: 'rgba(0,0,0,0)'
+        },
     ...(theme['stylesheet.agenda.list'] || {})
   });
 }
