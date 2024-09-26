@@ -58,30 +58,33 @@ shouldComponentUpdate(nextProps) {
   return changed;
 }
 
-  renderDate() {
-    const {item, date, renderDay} = this.props;
+ renderDate() {
+        const { item, date, renderDay } = this.props;
+        const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-    if (isFunction(renderDay)) {
-      return renderDay(date, item);
-    }
+        if (isFunction(renderDay)) {
+            return renderDay(date, item);
+        }
+        const today = date && isToday(date) ? this.style.today : undefined;
+        const dayNames = getDefaultLocale().dayNamesShort;
+        if (date) {
+            return (<View style={this.style.day} testID={RESERVATION_DATE}>
+                       <Text allowFontScaling={false} style={[this.style.dayText, today]}>
+            {dayNames ? dayNames[date.getDay()] : undefined}
+          </Text>
 
-    const today = date && isToday(date) ? this.style.today : undefined;
-    const dayNames = getDefaultLocale().dayNamesShort;
-
-    if (date) {
-      return (
-        <View style={this.style.day} testID={RESERVATION_DATE}>
           <Text allowFontScaling={false} style={[this.style.dayNum, today]}>
             {date.getDate()}
           </Text>
-          <Text allowFontScaling={false} style={[this.style.dayText, today]}>
-            {dayNames ? dayNames[date.getDay()] : undefined}
-          </Text>
-        </View>
-      );
+          <Text 
+  allowFontScaling={false} 
+  style={[this.style.dayMonth, today, { marginTop: -5 }]}
+>{monthNames[date.getMonth()]}</Text>
+   
+        </View>);
+        }
+        return <View style={this.style.day}/>;
     }
-    return <View style={this.style.day}/>;
-  }
 
   render() {
     const {item, date, renderItem, renderEmptyDate} = this.props;
