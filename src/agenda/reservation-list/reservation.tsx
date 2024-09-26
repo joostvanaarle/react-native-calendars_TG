@@ -48,30 +48,15 @@ class Reservation extends Component<ReservationProps> {
     this.style = styleConstructor(props.theme);
   }
 
-  shouldComponentUpdate(nextProps: ReservationProps) {
-    const d1 = this.props.date;
-    const d2 = nextProps.date;
-    const r1 = this.props.item;
-    const r2 = nextProps.item;
-    
-    let changed = true;
-    if (!d1 && !d2) {
-      changed = false;
-    } else if (d1 && d2) {
-      if (d1.getTime() !== d2.getTime()) {
-        changed = true;
-      } else if (!r1 && !r2) {
-        changed = false;
-      } else if (r1 && r2) {
-        if ((!d1 && !d2) || (d1 && d2)) {
-          if (isFunction(this.props.rowHasChanged)) {
-            changed = this.props.rowHasChanged(r1, r2);
-          }
-        }
-      }
-    }
-    return changed;
-  }
+shouldComponentUpdate(nextProps) {
+  const dateChanged = this.props.date?.getTime() !== nextProps.date?.getTime();
+    const itemChanged = JSON.stringify(this.props.item) !== JSON.stringify(nextProps.item);   
+  let changed = dateChanged || itemChanged;
+  if (this.props.rowHasChanged) {
+    changed = this.props.rowHasChanged(this.props.item, nextProps.item);
+  }  
+  return changed;
+}
 
   renderDate() {
     const {item, date, renderDay} = this.props;
