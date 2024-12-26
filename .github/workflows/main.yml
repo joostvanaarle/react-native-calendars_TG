@@ -5,6 +5,8 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -27,7 +29,7 @@ jobs:
       run: npm install --legacy-peer-deps
         
     - name: Build TypeScript
-      run: npm run build:ts  # We gebruiken build:ts in plaats van build
+      run: npm run build:ts
       
     - name: Commit built files
       run: |
@@ -41,3 +43,19 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}
+
+    # Voeg build files toe aan release als dit een release event is
+    - name: Zip build files
+      if: github.event_name == 'release'
+      run: zip -r build.zip dist/  # Pas dit pad aan naar waar je build files staan
+
+    - name: Upload Release Asset
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./build.zip
+        asset_name: build.zip
+        asset_content_type: application/zip
