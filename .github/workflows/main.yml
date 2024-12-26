@@ -44,10 +44,12 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}
 
-    # Voeg build files toe aan release als dit een release event is
-    - name: Zip build files
+    # Voeg dist directory toe aan release als dit een release event is
+    - name: Zip dist directory
       if: github.event_name == 'release'
-      run: zip -r build.zip dist/  # Pas dit pad aan naar waar je build files staan
+      run: |
+        zip -r dist.zip dist/
+        ls -la dist.zip
 
     - name: Upload Release Asset
       if: github.event_name == 'release'
@@ -56,6 +58,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./build.zip
-        asset_name: build.zip
+        asset_path: ./dist.zip
+        asset_name: dist.zip
         asset_content_type: application/zip
