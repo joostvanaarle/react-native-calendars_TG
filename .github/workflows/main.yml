@@ -24,10 +24,10 @@ jobs:
         node-version: '18.x'
         
     - name: Install dependencies
-      run: npm install --legacy-peer-deps  # Deze flag toevoegen
+      run: npm install --legacy-peer-deps
         
-    - name: Build
-      run: npm run build
+    - name: Build TypeScript
+      run: npm run build:ts  # We gebruiken build:ts in plaats van build
       
     - name: Commit built files
       run: |
